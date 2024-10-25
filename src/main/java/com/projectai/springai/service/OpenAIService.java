@@ -1,9 +1,13 @@
 package com.projectai.springai.service;
 
 import com.projectai.springai.model.Answer;
+import com.projectai.springai.model.GetCapitalRequest;
+import com.projectai.springai.model.Question;
 
 public interface OpenAIService {
 	
-	Answer getAnswer(String question);
+	Answer getAnswer(Question question);
+	
+	Answer getCapital(GetCapitalRequest getCapitalRequest);
 
 }
