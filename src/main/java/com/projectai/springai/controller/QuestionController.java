@@ -15,7 +15,7 @@ public class QuestionController {
 	@Autowired
 	OpenAIService openAIService;
 
-	@PostMapping("/question")
+	@PostMapping("/ask")
 	public Answer question(@RequestBody Question question) {
 		return openAIService.getAnswer(question.question());
 	}
