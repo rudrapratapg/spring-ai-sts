@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectai.springai.model.Answer;
 import com.projectai.springai.model.GetCapitalRequest;
 import com.projectai.springai.model.Question;
@@ -19,6 +22,9 @@ import com.projectai.springai.service.OpenAIService;
 
 @Service
 public class OpenAIServiceImpl implements OpenAIService {
+	
+	@Autowired
+	ObjectMapper objectMapper;
 	
 	private final ChatModel chatModel;
 	
@@ -47,6 +53,44 @@ public class OpenAIServiceImpl implements OpenAIService {
 		Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
 		ChatResponse response = chatModel.call(prompt);
 		return new Answer(response.getResult().getOutput().getContent());
+	}
+
+	//importing the prompt from the .st file
+	@Value("classpath:templates/get-capital-with-info.st")
+	private Resource getCapitalWithInfoPrompt;
+	@Override
+	public Answer getCapitalWithInfo(GetCapitalRequest getCapitalRequest) {
+		//using the template from .st file here
+		PromptTemplate promptTemplate = new PromptTemplate(getCapitalWithInfoPrompt);
+		
+		//mapping the dynamic value to the prompt on runtime
+		Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
+		ChatResponse response = chatModel.call(prompt);
+		return new Answer(response.getResult().getOutput().getContent());
+	}
+	
+	@Value("classpath:templates/get-capital-with-info-json.st")
+	private Resource getCapitalJsonPrompt;
+	@Override
+	public Answer getCapitalWithInfoJson(GetCapitalRequest getCapitalRequest) {
+		//using the template from the .st file
+		PromptTemplate promptTemplate = new PromptTemplate(getCapitalJsonPrompt);
+		
+		//mapping the dynamic value to the prompt on runtime
+		Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
+		ChatResponse response = chatModel.call(prompt);
+		
+		String responseString;
+		String responseContent = response.getResult().getOutput().getContent();
+		System.out.println("responseContent: "+responseContent);
+		 try {
+            JsonNode jsonNode = objectMapper.readTree(responseContent);
+            responseString = jsonNode.get("answer").asText();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+		
+		return new Answer(responseString);
 	}
 
 }
