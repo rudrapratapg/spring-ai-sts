@@ -19,7 +19,7 @@ class OpenAIServiceImplTest {
 	@Test
 	void testGetAnswer() {
 		Question question = new Question("What is tha capital of India?");
-		Answer answer = openAIService.getAnswer(question.question());
+		Answer answer = openAIService.getAnswer(question);
 		System.out.println("Answer:"+answer.answer());
 	}
 
