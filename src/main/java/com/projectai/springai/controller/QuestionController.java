@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projectai.springai.model.Answer;
 import com.projectai.springai.model.GetCapitalRequest;
+import com.projectai.springai.model.GetCapitalResponse;
 import com.projectai.springai.model.Question;
 import com.projectai.springai.service.OpenAIService;
 
@@ -34,5 +35,10 @@ public class QuestionController {
 	@PostMapping("/capitalWithInfoJson")
 	public Answer getCapitalWithInfoJson(@RequestBody GetCapitalRequest getCapitalRequest) {
 		return openAIService.getCapitalWithInfoJson(getCapitalRequest);
+	}
+	
+	@PostMapping("/capitalSchema")
+	public GetCapitalResponse getCapitalSchema(@RequestBody GetCapitalRequest getCapitalRequest) {
+		return openAIService.getCapitalSchema(getCapitalRequest);
 	}
 }
