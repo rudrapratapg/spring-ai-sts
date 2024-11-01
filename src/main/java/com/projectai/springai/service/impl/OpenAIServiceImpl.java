@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectai.springai.model.Answer;
+import com.projectai.springai.model.GetCapitalInfoResponse;
 import com.projectai.springai.model.GetCapitalRequest;
 import com.projectai.springai.model.GetCapitalResponse;
 import com.projectai.springai.model.Question;
@@ -121,6 +122,18 @@ public class OpenAIServiceImpl implements OpenAIService {
         }
 		
 		return new Answer(responseString);
+	}
+	
+	@Override
+	public GetCapitalInfoResponse getCapitalWithInfoSchema(GetCapitalRequest getCapitalRequest) {        
+		BeanOutputConverter<GetCapitalInfoResponse> converter = new BeanOutputConverter<>(GetCapitalInfoResponse.class);
+		String format = converter.getFormat();
+		PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptSchema);
+		Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry(),"format",format));
+		System.out.println("Prompt: "+prompt.getInstructions());
+		ChatResponse response = chatModel.call(prompt);
+		System.out.println("response: "+response.getResult().getOutput().getContent());
+		return converter.convert(response.getResult().getOutput().getContent());
 	}
 
 }
