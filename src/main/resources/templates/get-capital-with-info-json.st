@@ -1,1 +1,0 @@
-What is the capital of {stateOrCountry}? Respond only with a JSON object in this exact format: {"answer": "city_name"}. Do not include any extra text, formatting, or code blocks. Please ensure that your response is a valid JSON object. HINT: Use JSON syntax to format your response.
