@@ -23,8 +23,8 @@ This project includes the following features:
 ### Installation
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/rudrapratapg/spring-ai-sts
+   cd spring-ai-sts
    ```
 2. **Install Dependencies**: Make sure to update any dependencies in the `pom.xml` if necessary.
 3. **Configure API Keys**: Set up API keys for the models you plan to use (OpenAI, Azure, Amazon Bedrock, etc.) in your environment variables or application properties.
