@@ -71,7 +71,7 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public Answer askMovieGenie(Question question) {
-		List<Document> documentList = simpleVectorStore.similaritySearch(SearchRequest.query(question.question()).withTopK(4));
+		List<Document> documentList = simpleVectorStore.similaritySearch(SearchRequest.query(question.question()).withTopK(10));
 		List<CompletableFuture<String>> completableFuture = documentList.parallelStream().map(
 				document -> CompletableFuture.supplyAsync(
 						() -> document.getContent()
@@ -90,11 +90,12 @@ public class MovieServiceImpl implements MovieService {
 				Map.of(
 						"question",question.question(),
 						"documents",String.join(",", contentList),
-						"format", answerConverter
+						"format", answerConverter.getFormat()
 						)
 				);
 		ChatResponse chatResponse = chatModel.call(prompt);
 		String response = chatResponse.getResult().getOutput().getContent();
+		System.out.println("response :: "+response);
 		return answerConverter.convert(response);
 	}
 
