@@ -1,0 +1,19 @@
+spring:
+  application:
+   name: spring-ai-intro-sts
+# pass API key as environment variable e.g. -DOPENAI_API_KEY=your-api-key
+  ai:
+   openai:
+     api-key: ${OPENAI_API_KEY}
+     embedding:
+       options:
+         model: text-embedding-3-small
+     chat:
+       options:
+         model: gpt-4-turbo
+sfg:
+  aiapp:
+    vectorStorePath: E:\\Projects\\vectorstore.json
+# by the following way we can specify a list of documents in new line followed by minus followed by a space
+    documentsToLoad: 
+      - classpath:movies500.csv
